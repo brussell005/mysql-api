@@ -1,5 +1,7 @@
+// CREATING DATABASE AND CONNECTING
+// Sets up necessary modules and files
 const mysql = require('mysql');
-const queries = require('./queries/tasks.queries');
+const queries = require('./queries/inventory.queries');
 
 // Get the Host from Environment or use default
 const host = process.env.DB_HOST || 'localhost';
@@ -11,9 +13,13 @@ const user = process.env.DB_USER || 'root';
 const password = process.env.DB_PASS || 'password';
 
 // Get the Database from Environment or use default
-const database = process.env.DB_DATABASE || 'tododb';
+const database = process.env.DB_DATABASE || 'inventory';
 
-// Create the connection with required details
+// This is making a connection with mysql and we are telling it 
+// the host, user, password, and which database. By using the process.env
+// above, we can either get this information from the environment or use a 
+// default that we set.
+
 const con = mysql.createConnection({
   host,
   user,
@@ -24,11 +30,12 @@ const con = mysql.createConnection({
 // Connect to the database.
 con.connect(function(err) {
   if (err) throw err;
-  console.log('Connected!');
-
-  con.query(queries.CREATE_TASKS_TABLE, function(err, result) {
+  console.log('Successfully Connected');
+  
+ // Running a query to crete my inventory table. If it works, sends message to console.log
+  con.query(queries.CREATE_inventory_TABLE, function(err, result) {
     if (err) throw err;
-    console.log('Table created or exists already!');
+    console.log('Database was either created or already existed.');
   });
 });
 
