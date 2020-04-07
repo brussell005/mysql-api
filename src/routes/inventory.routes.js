@@ -7,8 +7,8 @@ inventoryRoutes.get('/', controllers.getALLINVENTORY).post('/', controllers.crea
 
 
 inventoryRoutes
-  .get('/', controllers.getSINGLEITEM) 
-  .put('/', controllers.updateITEM)
-  .delete('/', controllers.deleteITEM);
+  .get('/inventoryId', controllers.getSINGLEITEM) 
+  .put('/inventoryId', controllers.updateITEM)
+  .delete('/inventoryID', controllers.deleteITEM);
 
 module.exports = inventoryRoutes;

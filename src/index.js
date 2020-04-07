@@ -1,10 +1,13 @@
 
 // requiring these modules
 const express = require('express');
+const cors = require('cors');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 
 const inventoryRoutes = require('./routes/inventory.routes');
+const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.routes');
 const middleware = require('./middleware/errors.middleware');
 
 const app = express();
@@ -18,12 +21,19 @@ app.use(logger(logLevel));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// Allow websites to talk to our API service.
+app.use(cors());
+
 // ************************************
 // ROUTE-HANDLING MIDDLEWARE FUNCTIONS
 // ************************************
 
-// Handle routes for tasks.
-app.use('/inventory', inventoryRoutes); // http://localhost:3000/tasks
+// Partial API endpoints
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/inventory', inventoryRoutes); // http://localhost:3000/inventory
+
+
 // app.use('/users', usersRoutes); // http://localhost:3000/users
 
 // Handle 404 requests

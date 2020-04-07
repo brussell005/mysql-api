@@ -1,6 +1,7 @@
 // CREATING DATABASE AND CONNECTING
 // Sets up necessary modules and files
 const mysql = require('mysql');
+const authQueries = require('./queries/auth.queries');
 const queries = require('./queries/inventory.queries');
 
 // Get the Host from Environment or use default
@@ -32,10 +33,17 @@ con.connect(function(err) {
   if (err) throw err;
   console.log('Successfully Connected');
   
- // Running a query to crete my inventory table. If it works, sends message to console.log
+ // Running a query to create my inventory table. If it works, sends message to console.log
   con.query(queries.CREATE_inventory_TABLE, function(err, result) {
     if (err) throw err;
-    console.log('Database was either created or already existed.');
+    console.log('Inventory database was either created or already existed.');
+  });
+
+
+//Running a query to create my users table. If it works, sends message to console.log
+  con.query(authQueries.CREATE_USERS_TABLE, function(err, result) {
+    if (err) throw err;
+    console.log('Users database was either created or already existed.');
   });
 });
 
