@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const inventoryRoutes = require('./routes/inventory.routes');
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
-const middleware = require('./middleware/errors.middleware');
+const {error404, error500} = require('./middleware/errors.middleware');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -37,10 +37,10 @@ app.use('/api/inventory', inventoryRoutes); // http://localhost:3000/inventory
 // app.use('/users', usersRoutes); // http://localhost:3000/users
 
 // Handle 404 requests
-app.use(middleware.error404); // http://loaclhost:3000/users
+app.use(error404); // http://loaclhost:3000/users
 
 // Handle 500 requests - applies mostly to live services
-app.use(middleware.error500);
+app.use(error500);
 
 // listen on server port
 app.listen(port, function() {
