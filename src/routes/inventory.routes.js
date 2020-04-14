@@ -13,9 +13,9 @@ const inventoryRoutes = express.Router();
 inventoryRoutes.get('/', canAccess, getALLINVENTORY).post('/', canAccess, createITEM);
 
 inventoryRoutes
-  .get('/inventory/:id', canAccess, getSINGLEITEM) // GET http://locahost:3000/tasks/1
-  .put('/inventory/:id', canAccess, updateITEM)
-  .delete('/inventory/:id', canAccess, deleteITEM);
+  .get('/inventoryid', canAccess, getSINGLEITEM) // GET http://locahost:3000/tasks/1
+  .put('/inventoryid', canAccess, updateITEM)
+  .delete('/inventoryid', canAccess, deleteITEM)
 
   module.exports = inventoryRoutes;
 

@@ -16,8 +16,8 @@ const password = process.env.DB_PASS || 'password';
 const database = process.env.DB_DATABASE || 'inventory';
 
 // Create the connection with required details
-module.exports = async () =>
-  new Promise(async (resolve, reject) => {
+const connection = async () =>
+  new Promise((resolve, reject) => {
     const con = mysql.createConnection({
       host,
       user,
@@ -25,13 +25,30 @@ module.exports = async () =>
       database,
     });
 
-    const userTableCreated = await query(con, CREATE_USERS_TABLE).catch(
+    con.connect((err) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+    });
+
+    resolve(con);
+  });
+
+  // Create the connection with required details
+
+  (async () => {
+    const _con = await connection().catch((err) => {
+      throw err;
+  });
+
+    const userTableCreated = await query(_con, CREATE_USERS_TABLE).catch(
       (err) => {
         reject(err);
       }
     );
 
-    const inventoryTableCreated = await query(con, CREATE_INVENTORY_TABLE).catch(
+    const inventoryTableCreated = await query(_con, CREATE_INVENTORY_TABLE).catch(
       (err) => {
         reject(err);
       }
@@ -41,3 +58,5 @@ module.exports = async () =>
       resolve(con);
     }
   });
+
+  module.exports = connection;

@@ -30,7 +30,7 @@ exports.getSINGLEITEM = async (req, res) => {
     });
   
     // query all task
-    const inventory = await query(con, single_item, [req.params.taskId]).catch(
+    const inventory = await query(con, single_item, [req.params.inventoryId]).catch(
       (err) => {
         res.send(err);
       }
