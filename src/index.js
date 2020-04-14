@@ -1,21 +1,22 @@
-
-// requiring these modules
 const express = require('express');
 const cors = require('cors');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 
-const inventoryRoutes = require('./routes/inventory.routes');
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
-const {error404, error500} = require('./middleware/errors.middleware');
+const inventoryRoutes = require('./routes/inventory.routes');
+const { error404, error500 } = require('./middleware/errors.middleware');
 
 const app = express();
 const port = process.env.PORT || 3000;
 const logLevel = process.env.LOG_LEVEL || 'dev';
+const env = process.env.NODE_ENV;
 
 // Middleware - logs server requests to console
-app.use(logger(logLevel));
+if (env !== 'test') {
+  app.use(logger(logLevel));
+}
 
 // Middleware - parses incoming requests data (https://github.com/expressjs/body-parser)
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -29,20 +30,17 @@ app.use(cors());
 // ************************************
 
 // Partial API endpoints
-app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api/inventory', inventoryRoutes); // http://localhost:3000/inventory
-
-
-// app.use('/users', usersRoutes); // http://localhost:3000/users
+app.use('/api/auth', authRoutes); // http://localhost:3000/api/auth
+app.use('/api/user', userRoutes); // http://localhost:3000/api/users
+app.use('/api/inventory', inventoryRoutes); // http://localhost:3000/api/tasks
 
 // Handle 404 requests
-app.use(error404); // http://loaclhost:3000/users
+app.use(error404);
 
 // Handle 500 requests - applies mostly to live services
 app.use(error500);
 
 // listen on server port
-app.listen(port, function() {
+app.listen(port, () => {
   console.log(`We are listening at: ${port}...`);
 });

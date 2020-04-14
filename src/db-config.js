@@ -1,8 +1,7 @@
-// CREATING DATABASE AND CONNECTING
-// Sets up necessary modules and files
 const mysql = require('mysql');
-const authQueries = require('./queries/auth.queries');
-const queries = require('./queries/inventory.queries');
+const { CREATE_USERS_TABLE } = require('./queries/user.queries');
+const { CREATE_INVENTORY_TABLE } = require('./queries/inventory.queries');
+const query = require('./utils/query');
 
 // Get the Host from Environment or use default
 const host = process.env.DB_HOST || 'localhost';
@@ -16,35 +15,29 @@ const password = process.env.DB_PASS || 'password';
 // Get the Database from Environment or use default
 const database = process.env.DB_DATABASE || 'inventory';
 
-// This is making a connection with mysql and we are telling it 
-// the host, user, password, and which database. By using the process.env
-// above, we can either get this information from the environment or use a 
-// default that we set.
+// Create the connection with required details
+module.exports = async () =>
+  new Promise(async (resolve, reject) => {
+    const con = mysql.createConnection({
+      host,
+      user,
+      password,
+      database,
+    });
 
-const con = mysql.createConnection({
-  host,
-  user,
-  password,
-  database
-});
+    const userTableCreated = await query(con, CREATE_USERS_TABLE).catch(
+      (err) => {
+        reject(err);
+      }
+    );
 
-// Connect to the database.
-con.connect(function(err) {
-  if (err) throw err;
-  console.log('Successfully Connected');
-  
- // Running a query to create my inventory table. If it works, sends message to console.log
-  con.query(queries.CREATE_inventory_TABLE, function(err, result) {
-    if (err) throw err;
-    console.log('Inventory database was either created or already existed.');
+    const inventoryTableCreated = await query(con, CREATE_INVENTORY_TABLE).catch(
+      (err) => {
+        reject(err);
+      }
+    );
+
+    if (!!userTableCreated && !!inventoryTableCreated) {
+      resolve(con);
+    }
   });
-
-
-//Running a query to create my users table. If it works, sends message to console.log
-  con.query(authQueries.CREATE_USERS_TABLE, function(err, result) {
-    if (err) throw err;
-    console.log('Users database was either created or already existed.');
-  });
-});
-
-module.exports = con;
