@@ -1,22 +1,31 @@
 const express = require('express');
 const {
-    getALLINVENTORY,
-    getSINGLEITEM,
-    createITEM,
-    updateITEM,
-    deleteITEM,
+  getALLITEMS,
+  getSINGLEITEM,
+  insertITEM,
+  updateITEM,
+  deleteITEM,
 } = require('../controllers/inventory.controller');
 const canAccess = require('../middleware/auth.middleware');
 
 const inventoryRoutes = express.Router();
+/**
+ * Express routes for Tasks.
+ *
+ * RESTful endpoints make for easily adding to existing API features.
+ */
 
-inventoryRoutes.get('/', canAccess, getALLINVENTORY).post('/', canAccess, createITEM);
+/**
+ * Routes for all tasks. Evaluates to `/tasks/`.
+ */
+inventoryRoutes.get('/', canAccess, getALLITEMS).post('/', canAccess, insertITEM);
 
+/**
+ * Routes for a task by id. Evalutes to `/tasks/:taskId`.
+ */
 inventoryRoutes
-  .get('/inventoryid', canAccess, getSINGLEITEM) // GET http://locahost:3000/tasks/1
-  .put('/inventoryid', canAccess, updateITEM)
-  .delete('/inventoryid', canAccess, deleteITEM)
+  .get('/:inventoryId', canAccess, getSINGLEITEM) // GET http://locahost:3000/tasks/1
+  .put('/:inventoryId', canAccess, updateITEM)
+  .delete('/:inventoryId', canAccess, deleteITEM);
 
-  module.exports = inventoryRoutes;
-
-
+module.exports = inventoryRoutes;
