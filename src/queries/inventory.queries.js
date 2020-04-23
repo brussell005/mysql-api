@@ -46,6 +46,6 @@ exports.UPDATE_ITEM= (userId, inventory_Id, newValues) =>
   `UPDATE items SET ${newValues} WHERE user_id = ${userId} AND inventory_Id = ${inventory_Id}`;
 
 // Delete a task by id
-exports.DELETE_ITEM = (userId, inventory_Id) =>
-  `DELETE FROM items WHERE user_id = ${userId} AND inventory_Id = ${inventory_Id}`;
+exports.DELETE_ITEM = (userId, item_Id) =>
+  `DELETE FROM items WHERE user_id = ${userId} AND inventory_Id = ${item_Id}`;
 
